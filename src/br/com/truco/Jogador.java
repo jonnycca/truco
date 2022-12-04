@@ -2,6 +2,7 @@ package br.com.truco;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Jogador {
     private String nome;
@@ -50,5 +51,13 @@ public class Jogador {
 
     public void setEhMinhaVez(boolean ehMinhaVez) {
         this.ehMinhaVez = ehMinhaVez;
+    }
+
+    public boolean gritarTruco(){
+        System.out.format("Trucar %s? s : n", this.nome);
+        Scanner sc = new Scanner(System.in);
+        String trucou = sc.nextLine();
+
+        return trucou.equals("s");
     }
 }

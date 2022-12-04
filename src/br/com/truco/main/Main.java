@@ -31,7 +31,7 @@ public class Main {
 
 
 
-        while (jogador1.getPontos() < 3 && jogador2.getPontos() < 3){
+        while (jogador1.getPontos() < 12 && jogador2.getPontos() < 12){
             baralho.montarBaralho();
             limparCartasJogadores();
             prepararCartasJogador(jogador1, baralho);
@@ -43,12 +43,18 @@ public class Main {
             while (jogador1.getRodadasGanhas()< 2 && jogador2.getRodadasGanhas()< 2) { // verificar se der empate pq vai foder tudo
                 while (rodada.getCartasJogadas() != 2) {
                     if (jogador2.isEhMinhaVez()) {
+                        exibirCartasJogador(jogador2);
+                        //pedir truco
+                        rodada.verificarSeGritouTruco(jogador2.gritarTruco(), jogador2);
+                        //adiversario deve decidir sobre o truco
                         System.out.format("Escolha uma carta %s:", jogador2.getNome());
                         exibirCartasJogador(jogador2);
                         carta2 = jogarUmaCarta(jogador2, sc.nextInt());
                         jogador2.setEhMinhaVez(false);
                         jogador1.setEhMinhaVez(true);
                     } else {
+                        exibirCartasJogador(jogador1);
+                        rodada.verificarSeGritouTruco(jogador1.gritarTruco(), jogador1);
                         System.out.format("Escolha uma carta %s:", jogador1.getNome());
                         exibirCartasJogador(jogador1);
                         carta1 = jogarUmaCarta(jogador1, sc.nextInt());
@@ -62,6 +68,8 @@ public class Main {
             verificarQuemGanhouAMao();
         }
     }
+
+
 
     private static void verificarQuemGanhouAMao(){
         //remover as cartas do jogador
@@ -82,6 +90,7 @@ public class Main {
             jogador1.setRodadasGanhas(0);
             rodada.setCartasJogadas(0);
         }
+        rodada.setValendo(1);
     }
 
     private static void verificarQuemGanhouARodada(){
