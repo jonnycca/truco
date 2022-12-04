@@ -75,21 +75,15 @@ public class Main {
         //remover as cartas do jogador
         if(jogador1.getRodadasGanhas() == 2){
             jogador1.setPontos(jogador1.getPontos() + rodada.getValendo());
-            jogador1.setRodadasGanhas(0);
-            rodada.setCartasJogadas(0);
             jogador1.setEhMinhaVez(true);
-
-            jogador2.setRodadasGanhas(0);
-            rodada.setCartasJogadas(0);
         }else {
             jogador2.setPontos(jogador2.getPontos() + rodada.getValendo());
-            jogador2.setRodadasGanhas(0);
-            rodada.setCartasJogadas(0);
             jogador2.setEhMinhaVez(true);
-
-            jogador1.setRodadasGanhas(0);
-            rodada.setCartasJogadas(0);
         }
+
+        jogador2.setRodadasGanhas(0);
+        jogador1.setRodadasGanhas(0);
+        rodada.setCartasJogadas(0);
         rodada.setValendo(1);
     }
 
