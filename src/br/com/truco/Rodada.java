@@ -24,13 +24,14 @@ public class Rodada {
     }
 
 
-    public void verificarSeGritouTruco(boolean trucou, Jogador jogador){
+    public void verificarSeGritouTruco(boolean trucou, Jogador jogador, Jogador jogadorProximo){
         if(trucou){
-            aceitarTruco(jogador);
+            aceitarTruco(jogador, jogadorProximo);
         }
     }
 
-    private void aceitarTruco(Jogador jogador){
+    private void aceitarTruco(Jogador jogador, Jogador jogadorProximo){
+        jogadorProximo.exibirCartasJogador();
         System.out.format("Jogador %s esta trucando, deseja aceitar? s : n", jogador.getNome());
         Scanner sc = new Scanner(System.in);
         String aceitar = sc.nextLine();

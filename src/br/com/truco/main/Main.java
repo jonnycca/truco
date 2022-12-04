@@ -43,20 +43,18 @@ public class Main {
             while (jogador1.getRodadasGanhas()< 2 && jogador2.getRodadasGanhas()< 2) { // verificar se der empate pq vai foder tudo
                 while (rodada.getCartasJogadas() != 2) {
                     if (jogador2.isEhMinhaVez()) {
-                        exibirCartasJogador(jogador2);
-                        //pedir truco
-                        rodada.verificarSeGritouTruco(jogador2.gritarTruco(), jogador2);
-                        //adiversario deve decidir sobre o truco
+                        jogador2.exibirCartasJogador();
+                        rodada.verificarSeGritouTruco(jogador2.gritarTruco(), jogador2, jogador1);
                         System.out.format("Escolha uma carta %s:", jogador2.getNome());
-                        exibirCartasJogador(jogador2);
+                        jogador2.exibirCartasJogador();
                         carta2 = jogarUmaCarta(jogador2, sc.nextInt());
                         jogador2.setEhMinhaVez(false);
                         jogador1.setEhMinhaVez(true);
                     } else {
-                        exibirCartasJogador(jogador1);
-                        rodada.verificarSeGritouTruco(jogador1.gritarTruco(), jogador1);
+                        jogador1.exibirCartasJogador();
+                        rodada.verificarSeGritouTruco(jogador1.gritarTruco(), jogador1, jogador2);
                         System.out.format("Escolha uma carta %s:", jogador1.getNome());
-                        exibirCartasJogador(jogador1);
+                        jogador1.exibirCartasJogador();
                         carta1 = jogarUmaCarta(jogador1, sc.nextInt());
                         jogador1.setEhMinhaVez(false);
                         jogador2.setEhMinhaVez(true);
@@ -80,7 +78,6 @@ public class Main {
             jogador2.setPontos(jogador2.getPontos() + rodada.getValendo());
             jogador2.setEhMinhaVez(true);
         }
-
         jogador2.setRodadasGanhas(0);
         jogador1.setRodadasGanhas(0);
         rodada.setCartasJogadas(0);
@@ -107,29 +104,10 @@ public class Main {
         jogador2.getCartas().clear();
     }
 
-    private static void ta(Jogador jogador1, Jogador jogador2){
-        if(jogador1.isEhMinhaVez()){
-            exibirCartasJogador(jogador1);
-            Carta carta1 = jogarUmaCarta(jogador1, sc.nextInt());
-        }else {
-            exibirCartasJogador(jogador2);
-            Carta carta1 = jogarUmaCarta(jogador2, sc.nextInt());
-        }
-        //deciidir qual jogador vai jogar primeiro, exibir as cartas do primeiro jogador, jogar a carta do primeiro jogador, e fazer para o segundo jogador
-    }
-
     private static void prepararCartasJogador(Jogador jogador, Baralho baralho){
         jogador.getCartas().add(baralho.entregarCartaAleatoria());
         jogador.getCartas().add(baralho.entregarCartaAleatoria());
         jogador.getCartas().add(baralho.entregarCartaAleatoria());
-    }
-
-    private static void exibirCartasJogador(Jogador jogador){
-        System.out.println("");
-        for (Carta carta : jogador.getCartas()){
-            System.out.print(carta.getValor() + " " + carta.getNaipe() + "   ");
-        }
-        System.out.println("");
     }
 
     private static Carta jogarUmaCarta(Jogador jogador, int posicaoCarta){
@@ -141,7 +119,7 @@ public class Main {
             }catch (Exception e){
                 System.out.println("Posicao escolhida invalida! Tente novamente!");
                 System.out.format("Escolha uma carta %s:", jogador.getNome());
-                exibirCartasJogador(jogador);
+                jogador.exibirCartasJogador();
                 carta = jogarUmaCarta(jogador, sc.nextInt());
             }
         return carta;

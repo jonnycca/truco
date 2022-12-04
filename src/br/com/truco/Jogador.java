@@ -60,4 +60,12 @@ public class Jogador {
 
         return trucou.equals("s");
     }
+
+    public void exibirCartasJogador(){
+        System.out.println("");
+        for (Carta carta : this.cartas){
+            System.out.print(carta.getValor() + " " + carta.getNaipe() + "   ");
+        }
+        System.out.println("");
+    }
 }
