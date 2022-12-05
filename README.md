@@ -1,2 +1,2 @@
 # truco
-jogo de truco
+jogo de truco em java 
