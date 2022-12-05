@@ -24,24 +24,28 @@ public class Rodada {
     }
 
 
-    public void verificarSeGritouTruco(boolean trucou, Jogador jogador, Jogador jogadorProximo){
+    public boolean aceitarTruco(boolean trucou, Jogador jogador, Jogador jogadorProximo){
+        boolean aceitouTruco = false;
         if(trucou){
-            aceitarTruco(jogador, jogadorProximo);
+            aceitouTruco = aceitarTruco(jogador, jogadorProximo);
         }
+        return aceitouTruco;
     }
 
-    private void aceitarTruco(Jogador jogador, Jogador jogadorProximo){
+    private boolean aceitarTruco(Jogador jogador, Jogador jogadorProximo){
         jogadorProximo.exibirCartasJogador();
         System.out.format("Jogador %s esta trucando, deseja aceitar? s : n", jogador.getNome());
         Scanner sc = new Scanner(System.in);
         String aceitar = sc.nextLine();
-        if(decisaoTruco(aceitar)){
+        boolean aceitouTruco = decisaoTruco(aceitar);
+        if(aceitouTruco){
             if(this.valendo.equals(1)){
                 this.valendo = 3;
             }else {
                 this.valendo = valendo + 3;
             }
         }
+        return aceitouTruco;
     }
 
     private boolean decisaoTruco(String aceitar){

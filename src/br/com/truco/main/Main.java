@@ -37,38 +37,83 @@ public class Main {
             prepararCartasJogador(jogador2, baralho);
             rodada.setCartasJogadas(0);//verificar se remove daqui, ja tem no metodo veriicar quem ganhou a mao
 
-            System.out.println(jogador1.getNome() + ": " + jogador1.getPontos() + "                       " + jogador2.getNome() + ": " + jogador2.getPontos());
+            exibirPontuacao();
 
             while (jogador1.getRodadasGanhas() < 2 && jogador2.getRodadasGanhas() < 2) { // verificar se der empate pq vai foder tudo
-                while (rodada.getCartasJogadas() != 2 ) {
+                boolean gritouTruco = false;
+                boolean aceitouTruco = false;
+                while (rodada.getCartasJogadas() <2 ) {
                     if (jogador2.isEhMinhaVez()) {
                         jogador2.exibirCartasJogador();
-                        rodada.verificarSeGritouTruco(jogador2.gritarTruco(), jogador2, jogador1);
+                        gritouTruco = jogador2.gritarTruco();
+                        aceitouTruco = rodada.aceitarTruco(gritouTruco, jogador2, jogador1);
+                        verificarSeTrucouECorreuOuAceitou(gritouTruco, aceitouTruco, jogador2);
+
                         //pegar um retorno que identifique se o adversario correu do truco
 //                      se ele correu do truco
 //                        deve encerrar a rodada que é esse primeiro while
 
                         //quando sair desse primeiro while, o metodo  verificarQuemGanhouARodada deve ser moficado e nao deve comparar as cartas para verificar quem ganhou a rodada
 //                        e sim, quem correu pediu o truco que ganha os prontos da rodada
-                        System.out.format("Escolha uma carta %s:", jogador2.getNome());
-                        jogador2.exibirCartasJogador();
-                        carta2 = jogarUmaCarta(jogador2, sc.nextInt());
-                        jogador2.setEhMinhaVez(false);
-                        jogador1.setEhMinhaVez(true);
+//                        System.out.format("Escolha uma carta %s:", jogador2.getNome());
+//                        jogador2.exibirCartasJogador();
+//                        carta2 = jogarUmaCarta(jogador2, sc.nextInt());
+//                        jogador2.setEhMinhaVez(false);
+//                        jogador1.setEhMinhaVez(true);
                     } else {
                         jogador1.exibirCartasJogador();
-                        rodada.verificarSeGritouTruco(jogador1.gritarTruco(), jogador1, jogador2);
-                        System.out.format("Escolha uma carta %s:", jogador1.getNome());
-                        jogador1.exibirCartasJogador();
-                        carta1 = jogarUmaCarta(jogador1, sc.nextInt());
-                        jogador1.setEhMinhaVez(false);
-                        jogador2.setEhMinhaVez(true);
+                        gritouTruco = jogador1.gritarTruco();
+                        aceitouTruco = rodada.aceitarTruco(gritouTruco, jogador1, jogador2);
+                        verificarSeTrucouECorreuOuAceitou(gritouTruco, aceitouTruco, jogador1);
+
+
+//                        rodada.aceitarTruco(jogador1.gritarTruco(), jogador1, jogador2);
+//                        System.out.format("Escolha uma carta %s:", jogador1.getNome());
+//                        jogador1.exibirCartasJogador();
+//                        carta1 = jogarUmaCarta(jogador1, sc.nextInt());
+//                        jogador1.setEhMinhaVez(false);
+//                        jogador2.setEhMinhaVez(true);
                     }
                     rodada.setCartasJogadas(rodada.getCartasJogadas() + 1);
                 }
-                verificarQuemGanhouARodada();
+                verificarQuemGanhouARodada(gritouTruco, aceitouTruco);
             }
             verificarQuemGanhouAMao();
+        }
+    }
+
+    private static void exibirPontuacao(){
+        System.out.println(jogador1.getNome() + ": " + jogador1.getPontos() + "                       " + jogador2.getNome() + ": " + jogador2.getPontos());
+    }
+
+    private static void verificarSeTrucouECorreuOuAceitou(boolean trucou, Boolean aceitouTruco, Jogador jogador){
+        if(trucou == false){ //verificar se nem trucou e vai jogar de boa
+            jogadas(jogador);
+        }else if(trucou == true && aceitouTruco.equals(true)){//verificar se trucou e aceitou, vai jogar trucado
+            jogadas(jogador);
+        }else if(trucou == true && aceitouTruco.equals(false)){//verificar se trucou e aceitou, vai jogar trucado
+            forcarFimDaMaoEDaRodada(jogador);
+        }
+    }
+
+    private static void forcarFimDaMaoEDaRodada(Jogador jogador){
+        rodada.setCartasJogadas(2); // essa logica para terminar a mao
+        jogador.setRodadasGanhas(2);
+    }
+
+    private static void jogadas(Jogador jogador){
+        if(jogador.equals(jogador1)){
+            System.out.format("Escolha uma carta %s:", jogador.getNome());
+            jogador.exibirCartasJogador();
+            carta1 = jogarUmaCarta(jogador1, sc.nextInt());
+            jogador1.setEhMinhaVez(false);
+            jogador2.setEhMinhaVez(true);
+        }else {
+            System.out.format("Escolha uma carta %s:", jogador.getNome());
+            jogador.exibirCartasJogador();
+            carta2 = jogarUmaCarta(jogador2, sc.nextInt());
+            jogador2.setEhMinhaVez(false);
+            jogador1.setEhMinhaVez(true);
         }
     }
 
@@ -88,9 +133,22 @@ public class Main {
     }
 
 
-    private static void verificarQuemGanhouARodada() {
+    private static void verificarQuemGanhouARodada(boolean gritouTruco, Boolean aceitouTruco) {
         jogador1.setEhMinhaVez(false);
         jogador2.setEhMinhaVez(false);
+
+        //criar um if para so verificar a maior carta quando a logica do truco enquadrar
+        if(gritouTruco == false){ //verificar se nem trucou e vai jogar de boa
+            modificacoesQuandoDescobrirMaiorCarta();
+        }else if(gritouTruco == true && aceitouTruco.equals(true)){//verificar se trucou e aceitou, vai jogar trucado
+            modificacoesQuandoDescobrirMaiorCarta();
+        }
+//        else if(gritouTruco == true && aceitouTruco.equals(false)){//verificar se trucou e aceitou, vai jogar trucado
+//
+//        }
+    }
+
+    private static void modificacoesQuandoDescobrirMaiorCarta(){
         Jogador jogador = verificarMaiorCarta();
         if (jogador != null) {
             jogador.setRodadasGanhas(jogador.getRodadasGanhas() + 1);
@@ -116,7 +174,6 @@ public class Main {
 
     private static Carta jogarUmaCarta(Jogador jogador, int posicaoCarta) {
         Carta carta = null;
-
         try {
             carta = jogador.getCartas().get(posicaoCarta - 1);
             jogador.getCartas().remove(carta);

@@ -60,11 +60,16 @@ public class Jogador {
         this.maoRodada = maoRodada;
     }
 
+
     public boolean gritarTruco(){
-        System.out.format("Trucar %s? s : n", this.nome);
+        System.out.format("Trucar %s? s : n  ", this.nome);
         Scanner sc = new Scanner(System.in);
         String trucou = sc.nextLine();
 
+        while (!trucou.equals("s") && !trucou.equals("n")){
+            System.out.println("Opcao invalida! Digite novamente!");
+            trucou = sc.nextLine();
+        }
         return trucou.equals("s");
     }
 
