@@ -47,4 +47,16 @@ public class Rodada {
     private boolean decisaoTruco(String aceitar){
         return aceitar.equals("s");
     }
+
+    public void verificarQuemSeraOMaoDaRodada(Jogador jogador1, Jogador jogador2){
+        if(jogador1.isMaoRodada()){
+            jogador1.setMaoRodada(false);
+            jogador2.setMaoRodada(true);
+            jogador2.setEhMinhaVez(true);
+        }else {
+            jogador2.setMaoRodada(false);
+            jogador1.setMaoRodada(true);
+            jogador1.setEhMinhaVez(true);
+        }
+    }
 }

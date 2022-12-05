@@ -2,6 +2,7 @@ package br.com.truco;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Jogador {
@@ -13,6 +14,8 @@ public class Jogador {
 
     private boolean ehMinhaVez;
 
+    private boolean maoRodada;
+
     public String getNome() {
         return nome;
     }
@@ -23,10 +26,6 @@ public class Jogador {
 
     public List<Carta> getCartas() {
         return cartas;
-    }
-
-    public void setCartas(List<Carta> cartas) {
-        this.cartas = cartas;
     }
 
     public int getPontos() {
@@ -53,6 +52,14 @@ public class Jogador {
         this.ehMinhaVez = ehMinhaVez;
     }
 
+    public boolean isMaoRodada() {
+        return maoRodada;
+    }
+
+    public void setMaoRodada(boolean maoRodada) {
+        this.maoRodada = maoRodada;
+    }
+
     public boolean gritarTruco(){
         System.out.format("Trucar %s? s : n", this.nome);
         Scanner sc = new Scanner(System.in);
@@ -67,5 +74,18 @@ public class Jogador {
             System.out.print(carta.getValor() + " " + carta.getNaipe() + "   ");
         }
         System.out.println("");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Jogador jogador = (Jogador) o;
+        return pontos == jogador.pontos && rodadasGanhas == jogador.rodadasGanhas && ehMinhaVez == jogador.ehMinhaVez && maoRodada == jogador.maoRodada && Objects.equals(nome, jogador.nome) && Objects.equals(cartas, jogador.cartas);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, cartas, pontos, rodadasGanhas, ehMinhaVez, maoRodada);
     }
 }
